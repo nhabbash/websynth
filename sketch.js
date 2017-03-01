@@ -4,36 +4,10 @@ var env;
 var button;
 var oscSelect;
 var slider;
-var playing = false;
-
-function Box(x, y, width, height, moveable) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.moveable = moveable;
-
-    this.display = function() {
-        noStroke();
-        fill('red');
-        rect(this.x, this.y, this.width, this.height);
-    }
-
-    this.move = function() {
-        if(moveable) {
-            this.x = mouseX;
-            this.y = mouseY;
-        }
-    }
-
-    this.click = function() {
-
-    }
-
-}
+var playing = false
 
 function setup() {
-	createCanvas(400, 400);
+    createCanvas(400, 400);
     background(51);
     select('canvas').style('display', 'block');
 
@@ -60,15 +34,15 @@ function setup() {
 }
 
 function mousePressed() {
-
+    box.click();
 }
 
 function draw() {
     background(51);
     box.display();
-    if(mouseIsPressed && 
-    (dist(mouseX, mouseY, box.x, box.y) < box.width/2))
-        box.move();
+    
+    if(mouseIsPressed)
+            box.move();
 }
 
 function toggle() {
