@@ -8,7 +8,7 @@ function Box(x, y, width, height, moveable) {
     this.clicked = false;
 
     this.clickX ;
-    this.click;
+    this.clickY;
 
     this.display = function() {
         noStroke();
