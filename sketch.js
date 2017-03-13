@@ -1,13 +1,61 @@
-var button;
-var oscSelect;
-var slider;
-var oscs;
+// MIDI  note values to keyboard temp association. 60 is middle C
+var keyboard = {q: 60, "2": 61, w: 62, "3": 63, e: 64, "4": 65, r: 66, "5": 67, t: 68, "6": 69,  y: 70, "7": 71, u: 72};
+var voices = [];
+var pressedKeys = [];
 
-var pressedNotes;
+function playNote(k) {
+    if(!pressedKeys.includes(k)){
+        pressedKeys.push(k);
 
-var notesFreq = [16.35, 17.32, 18.35, 19.45, 20.60, 21.83, 23.12, 24.5, 25.96, 27.5, 29.14, 30.87];
-var notesIndexes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-var keyboard = {a: 0, s: 1, d: 2, f: 3, g: 4, h: 5, j: 6, k: 7, l: 8, n: 9,  m: 10};
+        var env = new p5.Env();
+        var osc = new p5.Oscillator();
+
+        // Need to softcode Envelope variables, related to osc.stop
+        env.setADSR(0.5, 0.25, 0.5, 0.2);
+        env.setRange(0.8, 0);
+
+        var synth = new Synth(osc, env);
+        synth.connect();
+
+        var note = keyboard[k];
+        var voice = new Voice(synth, note);
+
+        voice.play();
+
+        voices.push(voice);
+    }
+}
+
+function releaseNote(k) {
+    if(pressedKeys.includes(k)) {
+        var note = keyboard[k];
+        voices.forEach(function(voice, index, array) {
+            if(voice.note == note) {
+                voice.release();
+                array.splice(index, 1);
+            }
+        });
+        pressedKeys.splice(pressedKeys.indexOf(k), 1);
+    }
+}
+
+function keyPressed (){
+    key = key.toLowerCase();
+
+    if(keyboard.hasOwnProperty(key)) {
+        playNote(key);
+    }
+}
+
+function keyReleased() {
+     key = key.toLowerCase();
+
+    if(keyboard.hasOwnProperty(key)) {
+       releaseNote(key);
+   }
+}
+
+//*** Graphic stuff ***//
 
 function setup() {
     /*var cnv = createCanvas(400, 400);
@@ -45,28 +93,4 @@ function draw() {
     
     if(mouseIsPressed)
         box.move();*/
-}
-
-function playNote(k) {
-    if(!pressedKeys.includes(k)){
-        pressedKeys.push(k);
-        
-        var env = new p5.Env();
-        var osc = new p5.Oscillator();
-        var note = notesFreq[keyboard[k]]*16;
-
-        osc.setType(oscSelect.value());
-
-        env.setADSR(0.5, 0.25, 0.5, 0.2);
-        env.setRange(0.8, 0);
-
-        osc.amp(env);
-        osc.freq(note);
-        osc.start();
-        env.triggerAttack();
-    }
-}
-
-function keyTyped (){
-    playNote(key);
 }

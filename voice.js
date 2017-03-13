@@ -1,17 +1,17 @@
-function Voice(synth, freq) {
+function Voice(synth, note) {
   this.synth = synth;
-  this.synths = [];
-
-  this.synth.osc.freq(freq);
+  this.note = note;
 
   this.play = function() {
     this.synth.osc.start();
+    this.synth.osc.freq(midiToFreq(note));
     this.synth.env.triggerAttack();
-    this.synths.push(this.synth);
   }
 
-  this.stop = function() {
-
+  this.release = function() {
+    this.synth.env.triggerRelease();
+    this.synth.osc.stop(0.2);
+    //Stop needs have in input the value of Release of the envelope + small time
   }
 
 }
