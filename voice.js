@@ -10,7 +10,7 @@ function Voice(synth, note) {
 
   this.release = function() {
     this.synth.env.triggerRelease();
-    this.synth.osc.stop(0.2);
+    this.synth.osc.stop(0.3);
     //Stop needs have in input the value of Release of the envelope + small time
   }
 
