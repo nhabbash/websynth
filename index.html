@@ -1,16 +1,28 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script language="javascript" type="text/javascript" src="libraries/p5.min.js"></script>
-  <!-- uncomment lines below to include extra p5 libraries -->
-  <script language="javascript" src="libraries/p5.dom.js"></script>
-  <script language="javascript" src="libraries/p5.sound.js"></script>
-  <script language="javascript" type="text/javascript" src="sketch.js"></script>
-    <script language="javascript" type="text/javascript" src="synth.js"></script>
-      <script language="javascript" type="text/javascript" src="voice.js"></script>
-  <!-- this line removes any default padding and style. you might only need one of these values set. -->
-  <style> body {padding: 0; margin: 0;} </style>
+  <script language="javascript" type="text/javascript" src="libraries/Tone.js"></script>
+  <script language="javascript" type="text/javascript" src="js/script.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/keyboard.css">
 </head>
-<body>
-</body>
+
+<div id="keyboard">
+    <div id="keys">
+        <div id="q" class="note white">Q</div>
+        <div id="2" class="note black">2</div>
+        <div id="w" class="note white">W</div>
+        <div id="3" class="note black">3</div>
+        <div id="e" class="note white">E</div>
+        <div id="r" class="note white">R</div>
+        <div id="5" class="note black">5</div>
+        <div id="t" class="note white">T</div>
+        <div id="6" class="note black">6</div>
+        <div id="y" class="note white">Y</div>
+        <div id="7" class="note black">7</div>
+        <div id="u" class="note white">U</div>
+    </div>
+</div>
 </html>

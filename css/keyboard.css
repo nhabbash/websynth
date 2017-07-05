@@ -1,0 +1,40 @@
+#keyboard {
+    display: flex;
+    flex-flow: column;
+    flex: 4;
+    padding: 1%;
+    height: 100px;
+}
+
+#keys {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    width: 20%;
+}
+
+.note {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.black {
+    position: relative;
+    justify-content: center;
+    height: 60%;
+    background-color: #474747;
+    color: white;
+    margin: 0 -4%;
+}
+
+.white {
+    flex-flow: column;
+    justify-content: flex-end;
+    outline: 2px solid #474747;
+    color: #474747;
+    background-color: #ffffff;
+    padding-bottom: 1%;
+    flex: 1.6;
+}
