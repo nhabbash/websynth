@@ -1,4 +1,4 @@
-<html>
+
 <head>
   <meta charset="UTF-8">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -9,8 +9,41 @@
   <link rel="stylesheet" type="text/css" href="css/keyboard.css">
 </head>
 
+<!-- FORM -->
+Octaves:
+</br>
+<select id="octaves">
+  <option value="1">C1 - B2</option>
+  <option value="2">C2 - B3</option>
+  <option value="3">C3 - B4</option>
+  <option value="4" selected>C4 - B5</option>
+  <option value="5">C5 - B6</option>
+  <option value="6">C6 - B7</option>
+</select>
+</br>
+
+Synth:
+</br>
+Presets:
+</br>
+<select id="presets">
+  <option value="1">Mono</option>
+  <option value="2">AM</option>
+  <option value="3">Duo</option>
+  <option value="4">FM</option>
+  <option value="5">Membrane</option>
+  <option value="6">Noise</option>
+  <option value="7">Pluck</option>
+  <option value="8">Metal</option>
+</select>
+</br>
+
+<button id="setButton">Set Synth</button>
+
+<!-- KEYBOARD -->
+
 <div id="keyboard">
-    <div id="keys">
+    <div class="keys">
         <div id="q" class="note white">Q</div>
         <div id="2" class="note black">2</div>
         <div id="w" class="note white">W</div>
@@ -24,5 +57,19 @@
         <div id="7" class="note black">7</div>
         <div id="u" class="note white">U</div>
     </div>
+
+    <div class="keys">
+        <div id="z" class="note white">Z</div>
+        <div id="s" class="note black">S</div>
+        <div id="x" class="note white">X</div>
+        <div id="d" class="note black">D</div>
+        <div id="c" class="note white">C</div>
+        <div id="v" class="note white">V</div>
+        <div id="g" class="note black">G</div>
+        <div id="b" class="note white">B</div>
+        <div id="h" class="note black">H</div>
+        <div id="n" class="note white">N</div>
+        <div id="j" class="note black">J</div>
+        <div id="m" class="note white">M</div>
+    </div>
 </div>
-</html>
