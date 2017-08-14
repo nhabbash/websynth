@@ -121,6 +121,21 @@ function setSynth(){
     case 6:
       synth = new Tone.PolySynth(10, Tone.PluckSynth).toMaster();
       break;
+    case 7:
+      synth = new Tone.PolySynth(3, Tone.SimpleSynth).set({
+			'volume' : -4,
+			'oscillator' : {
+				'type' : 'triangle17',
+				// 'partials' : [16, 8, 4, 2, 1, 0.5, 1, 2]
+			},
+			'envelope' : {
+				'attack' : 0.01,
+				'decay' : 0.1,
+				'sustain' : 0.2,
+				'release' : 1.7,
+			}
+		}).toMaster();
+      break;
   }
 
   vol = document.getElementById("volume").value;
