@@ -6,39 +6,57 @@
   <script language="javascript" type="text/javascript" src="libraries/Tone.js"></script>
   <script language="javascript" type="text/javascript" src="js/script.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="css/keyboard.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
-<!-- FORM -->
-Octaves:
-</br>
-<select id="octaves">
-  <option value="1">C1 - B2</option>
-  <option value="2">C2 - B3</option>
-  <option value="3">C3 - B4</option>
-  <option value="4" selected>C4 - B5</option>
-  <option value="5">C5 - B6</option>
-  <option value="6">C6 - B7</option>
-</select>
-</br>
+<!-- SETTINGS -->
+<div class="settings">
 
-Synth:
-</br>
-Presets:
-</br>
-<select id="presets">
-  <option value="1">Mono</option>
-  <option value="2">AM</option>
-  <option value="3">Duo</option>
-  <option value="4">FM</option>
-  <option value="5">Membrane</option>
-  <option value="6">Noise</option>
-  <option value="7">Pluck</option>
-  <option value="8">Metal</option>
-</select>
-</br>
+  <div class="settingbox">
+    Volume:
+    </br>
+    <input type="range" name="volumeInput" min="0" max="100" onchange="updateTextInput(this.value);">
+    <input type="text" id="volume" value="" size=1>
+  </div>
 
-<button id="setButton">Set Synth</button>
+  <div class="settingbox">
+    Octaves:
+    </br>
+    <select id="octaves">
+      <option value="1">C1 - B2</option>
+      <option value="2">C2 - B3</option>
+      <option value="3">C3 - B4</option>
+      <option value="4" selected>C4 - B5</option>
+      <option value="5">C5 - B6</option>
+      <option value="6">C6 - B7</option>
+    </select>
+    </br>
+    Change octaves with ↑↓
+  </div>
+
+  <div class="settingbox">
+    Mode:</br>
+    <input type="radio" name="mode" value=0 checked>Normal<br>
+    <input type="radio" name="mode" value=1>Chord<br>
+  </div>
+
+  <div class="settingbox">
+    Presets:
+    </br>
+    <select id="presets">
+      <option value="1">Mono</option>
+      <option value="2" selected>AM</option>
+      <option value="3">Duo</option>
+      <option value="4">FM</option>
+      <option value="5">Membrane</option>
+      <option value="6">Pluck</option>
+    </select>
+    </br>
+  </div>
+  <button id="setButton">Set Synth</button>
+</div>
+
+</br></br>
 
 <!-- KEYBOARD -->
 

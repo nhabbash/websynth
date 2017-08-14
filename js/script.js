@@ -11,10 +11,15 @@ var keyboard2 = {z: "C", s: "C#", x: "D", d: "D#", c: "E", v: "F", g: "F#", b: "
                                 h: "G#", n: "A",  j: "A#", m: "B"};
 
 // Interface
-var sel;
+var octave_sel;
+var preset_sel;
+var mode_radio;
+var setButton;
+
 var octave;
 var preset;
-var setButton;
+var mode;
+var vol;
 
 // Synth
 var keys_pressed = [];
@@ -22,65 +27,82 @@ var synth;
 
 function keyPressed(){
 
-    key = key.toLowerCase();
-    key_token = key + octave;
-
-    if(keyboard1.hasOwnProperty(key)) {
-        if(!keys_pressed.includes(key_token)) {
-          keys_pressed.push(key_token);
-          synth.triggerAttack(keyboard1[key]+octave);
-          document.getElementById(key).classList.add("selected");
+    switch(keyCode){
+      case 38:
+        if(octave<6){
+          octave_sel.options[octave_sel.selectedIndex+1].selected=true;
+          octave+=1;
         }
-    }else{
-      if(keyboard2.hasOwnProperty(key)) {
-          if(!keys_pressed.includes(key_token)) {
-            keys_pressed.push(key_token);
-            synth.triggerAttack(keyboard2[key]+(parseInt(octave)+1));
-            document.getElementById(key).classList.add("selected");
-          }
-      }
+        break;
+      case 40:
+        if(octave>1){
+          octave_sel.options[octave_sel.selectedIndex-1].selected=true;
+          octave-=1;
+        }
+        break;
+
+      default:
+        noteTriggered(key.toLowerCase(), octave);
     }
 }
 
 function keyReleased() {
+    noteReleased(key.toLowerCase(), octave);
+}
 
-    key = key.toLowerCase();
-    key_token = key + octave;
+function noteTriggered(key, octave){
 
-    if(keyboard1.hasOwnProperty(key)) {
-       if(keys_pressed.includes(key_token)) {
-         synth.triggerRelease(keyboard1[key]+octave);
-         keys_pressed.splice(keys_pressed.indexOf(key_token), 1);
-         document.getElementById(key).classList.remove("selected");
-       }
-   }else{
-     if(keyboard2.hasOwnProperty(key)) {
-        if(keys_pressed.includes(key_token)) {
-          synth.triggerRelease(keyboard2[key]+(parseInt(octave)+1));
-          keys_pressed.splice(keys_pressed.indexOf(key_token), 1);
-          document.getElementById(key).classList.remove("selected");
+  key_token = key + octave;
+
+  if(keyboard1.hasOwnProperty(key)) {
+      if(!keys_pressed.includes(key_token)) {
+        keys_pressed.push(key_token);
+        synth.triggerAttack(keyboard1[key]+octave);
+        document.getElementById(key).classList.add("selected");
+      }
+  }else{
+    if(keyboard2.hasOwnProperty(key))
+        if(!keys_pressed.includes(key_token)) {
+          keys_pressed.push(key_token);
+          synth.triggerAttack(keyboard2[key]+(parseInt(octave)+1));
+          document.getElementById(key).classList.add("selected");
         }
-    }
   }
 }
 
-function noteTriggered(){
+function noteReleased(key, octave){
 
-}
+  key_token = key + octave;
 
-function noteReleased(){
-
+  if(keyboard1.hasOwnProperty(key)) {
+     if(keys_pressed.includes(key_token)) {
+       synth.triggerRelease(keyboard1[key]+octave);
+       keys_pressed.splice(keys_pressed.indexOf(key_token), 1);
+       document.getElementById(key).classList.remove("selected");
+     }
+ }else{
+   if(keyboard2.hasOwnProperty(key))
+      if(keys_pressed.includes(key_token)) {
+        synth.triggerRelease(keyboard2[key]+(parseInt(octave)+1));
+        keys_pressed.splice(keys_pressed.indexOf(key_token), 1);
+        document.getElementById(key).classList.remove("selected");
+      }
+  }
 }
 
 function setSynth(){
 
-  sel = document.getElementById("octaves");
-  octave = sel.options[sel.selectedIndex].value;
+  octave = parseInt(octave_sel.options[octave_sel.selectedIndex].value);
+  preset = parseInt(preset_sel.options[preset_sel.selectedIndex].value);
 
-  sel = document.getElementById("presets");
-  preset = sel.options[sel.selectedIndex].value;
+  for(var i = 0; i < mode_radio.length; i++){
+    if(mode_radio[i].checked)
+        mode = parseInt(mode_radio[i].value);
+    }
 
-  switch(parseInt(preset)){
+  synth.dispose();
+
+  switch(preset){
     case 1:
       synth = new Tone.PolySynth(10, Tone.MonoSynth).toMaster();
       break;
@@ -97,26 +119,38 @@ function setSynth(){
       synth = new Tone.PolySynth(10, Tone.MembraneSynth).toMaster();
       break;
     case 6:
-      synth = new Tone.PolySynth(10, Tone.NoiseSynth).toMaster();
-      break;
-    case 7:
       synth = new Tone.PolySynth(10, Tone.PluckSynth).toMaster();
       break;
-    case 8:
-      synth = new Tone.PolySynth(10, Tone.MetalSynth).toMaster();
-    break;
   }
+
+  vol = document.getElementById("volume").value;
+  document.getElementsByName("volumeInput")[0].value = vol;
+  synth.volume.value = vol;
 }
 
 function setup(){
-  sel = document.getElementById("octaves");
-  octave = sel.options[sel.selectedIndex].value;
+  octave_sel = document.getElementById("octaves");
+  octave = parseInt(octave_sel.options[octave_sel.selectedIndex].value);
 
-  synth = new Tone.PolySynth(10, Tone.MembraneSynth).toMaster();
+  preset_sel = document.getElementById("presets");
+
+  mode_radio = document.getElementsByName("mode");
+  mode = 0;
 
   setButton = document.getElementById('setButton');
   setButton.addEventListener('click', function() {
-      //sel.options[sel.selectedIndex].setAttribute("selected");
       setSynth();
   });
+
+  synth = new Tone.PolySynth(10, Tone.AMSynth).toMaster();
+
+  vol = 50;
+  synth.volume.value = vol;
+  document.getElementsByName("volumeInput")[0].value = vol;
+  document.getElementById("volume").value = vol;
+}
+
+function updateTextInput(val) {
+  document.getElementById("volume").value = val;
+  synth.volume.value = val;
 }
