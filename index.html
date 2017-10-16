@@ -1,8 +1,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script language="javascript" type="text/javascript" src="libraries/p5.min.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
   <script language="javascript" type="text/javascript" src="libraries/Tone.js"></script>
   <script language="javascript" type="text/javascript" src="js/script.js"></script>
 
@@ -15,7 +15,7 @@
   <div class="settingbox">
     Volume:
     </br>
-    <input type="range" name="volumeInput" min="0" max="100" onchange="updateTextInput(this.value);">
+    <input type="range" name="volumeInput" min="-50" max="50" onchange="updateTextInput(this.value, 'volume');">
     <input type="text" id="volume" value="" size=1>
   </div>
 
@@ -47,7 +47,7 @@
   </div>
 
   <div class="settingbox">
-    Synth Presets:
+    Presets:
     </br>
     <select id="presets">
       <option value="1">Mono</option>
@@ -60,7 +60,40 @@
     </select>
     </br>
   </div>
+
+  <div id="advanced">
+    <div class="settingbox">
+      Oscillator type:
+      <select id="oscType">
+        <option value="1" selected>Sine</option>
+        <option value="2">Square</option>
+        <option value="3">Triangle</option>
+        <option value="4">Sawtooth</option>
+      </select>
+    </div>
+
+    <div class="settingbox">
+      Phase:
+      </br>
+      <input type="range" name="phaseInput" min="0" max="180" onchange="updateTextInput(this.value, 'phase');">
+      <input type="text" id="phase" value="" size=1>
+    </div>
+
+    <div class="settingbox">
+      Envelope(ADSR):
+      </br>
+      <input type="range" name="attackInput" min="0.0" max="2.0" step="0.01" onchange="updateTextInput(this.value, 'attack');">
+      <input type="text" id="attack" value="" size=1>
+      <input type="range" name="decayInput" min="0.0" max="2.0" step="0.01" onchange="updateTextInput(this.value, 'decay');">
+      <input type="text" id="decay" value="" size=1>
+      <input type="range" name="sustainInput" min="0.0" max="2.0" step="0.01" onchange="updateTextInput(this.value, 'sustain');">
+      <input type="text" id="sustain" value="" size=1>
+      <input type="range" name="releaseInput" min="0.0" max="2.0" step="0.01" onchange="updateTextInput(this.value, 'release');">
+      <input type="text" id="release" value="" size=1>
+    </div>
+</div>
   <button id="setButton">Set Controller</button>
+  <button id="advanced">Advanced</button>
 </div>
 
 </br></br>

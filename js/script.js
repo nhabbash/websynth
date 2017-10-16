@@ -21,6 +21,9 @@ var preset;
 var mode;
 var vol;
 
+var fft, waveform;
+var fftvalues, wavevalues;
+
 // Synth
 var keys_pressed = [];
 var synth;
@@ -42,7 +45,10 @@ function keyPressed(){
         break;
 
       default:
+      if(keyboard1.hasOwnProperty(key.toLowerCase()))
         noteTriggered(key.toLowerCase(), octave);
+      else if (keyboard2.hasOwnProperty(key.toLowerCase()))
+        noteTriggered(key.toLowerCase(), octave+1);
     }
 }
 
@@ -53,21 +59,11 @@ function keyReleased() {
 function noteTriggered(key, octave){
 
   key_token = key + octave;
-
-  if(keyboard1.hasOwnProperty(key)) {
-      if(!keys_pressed.includes(key_token)) {
-        keys_pressed.push(key_token);
-        synth.triggerAttack(keyboard1[key]+octave);
-        document.getElementById(key).classList.add("selected");
-      }
-  }else{
-    if(keyboard2.hasOwnProperty(key))
-        if(!keys_pressed.includes(key_token)) {
-          keys_pressed.push(key_token);
-          synth.triggerAttack(keyboard2[key]+(parseInt(octave)+1));
-          document.getElementById(key).classList.add("selected");
-        }
-  }
+    if(!keys_pressed.includes(key_token)) {
+      keys_pressed.push(key_token);
+      synth.triggerAttack(keyboard1[key]+octave);
+      document.getElementById(key).classList.add("selected");
+    }
 }
 
 function noteReleased(key, octave){
@@ -136,6 +132,8 @@ function setSynth(){
 			}
 		}).toMaster();
       break;
+
+      synth.fan(waveform).toMaster();
   }
 
   vol = document.getElementById("volume").value;
@@ -157,15 +155,80 @@ function setup(){
       setSynth();
   });
 
-  synth = new Tone.PolySynth(10, Tone.AMSynth).toMaster();
+  synth = new Tone.PolySynth(10, Tone.Synth).toMaster();
 
-  vol = 50;
+  vol = -25;
   synth.volume.value = vol;
   document.getElementsByName("volumeInput")[0].value = vol;
   document.getElementById("volume").value = vol;
+
+  //FFT
+  createCanvas(800,400);
+  noFill();
+  background(30);
+
+  waveform = new Tone.Waveform(1024);
+  synth.fan(waveform).toMaster();
+
 }
 
-function updateTextInput(val) {
-  document.getElementById("volume").value = val;
-  synth.volume.value = val;
+function updateTextInput(val, id) {
+  document.getElementById(id).value = val;
+
+  switch(id){
+    case "volume":
+      synth.volume.value = val;
+    break;
+
+    case "phase":
+    synth.voices.forEach(function(voice){
+      voice.oscillator.phase = val;
+      });
+    break;
+
+    case "attack":
+      synth.voices.forEach(function(voice){
+        voice.envelope.attack = val;
+        });
+    break;
+
+    case "decay":
+      synth.voices.forEach(function(voice){
+        voice.envelope.decay = val;
+        });
+    break;
+
+    case "sustain":
+      synth.voices.forEach(function(voice){
+        voice.envelope.sustain = val;
+        });
+    break;
+
+    case "release":
+      synth.voices.forEach(function(voice){
+        voice.envelope.release= val;
+        });
+      break;
+  }
+}
+
+function draw() {
+  background(30);
+  // draw the shape of the waveform
+  wavevalues = waveform.getValue();
+  drawWaveform(wavevalues);
+  //waveform = waveform.dispose();
+}
+
+function drawWaveform(wavevalues){
+  noFill();
+  beginShape();
+  stroke(255, 255, 255);
+  strokeWeight(1);
+  for (var i = 0; i < wavevalues.length; i++){
+    var x = map(i, 0, wavevalues.length, 0, width);
+    var y = map(wavevalues[i]*10, -1, 1, 0, height);
+    vertex(x, y);
+  }
+  endShape();
 }

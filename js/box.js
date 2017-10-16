@@ -1,3 +1,5 @@
+//Test UI for modular synth 
+
 function Box(x, y, width, height, moveable) {
     this.x = x;
     this.y = y;
@@ -24,7 +26,7 @@ function Box(x, y, width, height, moveable) {
     }
 
     this.click = function() {
-        if(dist(mouseX, mouseY, this.x+this.width/2, this.y+this.height/2) 
+        if(dist(mouseX, mouseY, this.x+this.width/2, this.y+this.height/2)
             < this.width/2) {
             this.clicked = true;
             this.clickX = this.x - mouseX;
