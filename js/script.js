@@ -6,7 +6,8 @@ var notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
 // Keyboard
 var keyboard1 = {q: "C", "2": "C#", w: "D", "3": "D#", e: "E", r: "F", "5": "F#", t: "G",
-                "6": "G#", y: "A",  "7": "A#", u: "B"};
+                "6": "G#", y: "A",  "7": "A#", u: "B",
+                };
 var keyboard2 = {z: "C", s: "C#", x: "D", d: "D#", c: "E", v: "F", g: "F#", b: "G",
                                 h: "G#", n: "A",  j: "A#", m: "B"};
 
@@ -45,45 +46,51 @@ function keyPressed(){
         break;
 
       default:
-      if(keyboard1.hasOwnProperty(key.toLowerCase()))
-        noteTriggered(key.toLowerCase(), octave);
-      else if (keyboard2.hasOwnProperty(key.toLowerCase()))
-        noteTriggered(key.toLowerCase(), octave+1);
+        key = key.toLowerCase();
+
+        if(keyboard1.hasOwnProperty(key)) {
+          key_token = key + octave;
+          keys_pressed.push(key_token);
+          noteTriggered(keyboard1[key], octave);
+          document.getElementById(key).classList.add("selected");
+        }else if (keyboard2.hasOwnProperty(key)) {
+          key_token = key + octave;
+          keys_pressed.push(key_token);
+          noteTriggered(keyboard2[key], octave+1);
+          document.getElementById(key).classList.add("selected");
+        }
+
+        break;
     }
 }
 
 function keyReleased() {
-    noteReleased(key.toLowerCase(), octave);
-}
-
-function noteTriggered(key, octave){
-
-  key_token = key + octave;
-    if(!keys_pressed.includes(key_token)) {
-      keys_pressed.push(key_token);
-      synth.triggerAttack(keyboard1[key]+octave);
-      document.getElementById(key).classList.add("selected");
-    }
-}
-
-function noteReleased(key, octave){
-
-  key_token = key + octave;
-
+  key = key.toLowerCase();
   if(keyboard1.hasOwnProperty(key)) {
-     if(keys_pressed.includes(key_token)) {
-       synth.triggerRelease(keyboard1[key]+octave);
+    key_token = key + octave;
+    if(keys_pressed.includes(key_token)) {
+       noteReleased(keyboard1[key], octave);
        keys_pressed.splice(keys_pressed.indexOf(key_token), 1);
        document.getElementById(key).classList.remove("selected");
      }
  }else{
-   if(keyboard2.hasOwnProperty(key))
+   if(keyboard2.hasOwnProperty(key)) {
+      key_token = key + octave;
       if(keys_pressed.includes(key_token)) {
-        synth.triggerRelease(keyboard2[key]+(parseInt(octave)+1));
+        noteReleased(keyboard2[key], octave+1);
         keys_pressed.splice(keys_pressed.indexOf(key_token), 1);
         document.getElementById(key).classList.remove("selected");
       }
+    }
   }
+}
+
+function noteTriggered(note, octave){
+  synth.triggerAttack(note+octave);
+}
+
+function noteReleased(note, octave){
+  synth.triggerRelease(note+octave);
 }
 
 function setSynth(){
